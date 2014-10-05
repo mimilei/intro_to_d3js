@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="fn.js"></script>
+        <script src="data.js"></script>
+    </head>
+    <body>
+        <h1 align="center">D3.js with real-world data!</h1>
+            
+        <script type="text/javascript">//why it's in body
+
+            var w = 800,
+                h = 600,
+                padding = 30;
+
+            canvas = d3.select("body")
+              .append("svg")
+              .attr("width",w)
+              .attr("height",h)
+            
+            circles = canvas.selectAll("circle")
+                  .data(data)  
+                  .enter()
+                  .append("circle");
+            
+            circles.attr("cx", 10)     
+                  .attr("cy", 10)
+                  .attr("r", 10)
+                  .attr("fill", function(d){
+                    return "rgb(0,0,0)";
+                  })
+                  .attr("opacity",0.1);
+            
+            circles.transition()
+                  .duration(1000)
+                  .attr("cx", function(d){
+                    return d.Money*150+padding;
+                  })
+                  .transition()
+                  .duration(1000)
+                  .attr("cy", function(d){
+                    return d.Looks*120+padding;
+                  })
+                  .transition()
+                  .duration(1000)
+                  .attr("r", function(d){
+                    return d.Grades*10;
+                  })
+                  .attr("fill", function(d){
+                    return "rgb("+d.Grades*50+","+0+","+100+")";
+                  });
+            
+        </script>
+
+    </body>
+</html>     

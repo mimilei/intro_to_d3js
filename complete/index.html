@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"> <!-- utf 8 is the most popularly used character encoding for the internet-->
+	<title>Intro to Data Visualization</title>
+	<script type="text/javascript" src="d3/d3.v3.js"></script> <!-- This tells program where your d3 file is stored so it can access the library / links to d3 library you downloaded-->
+</head>
+<body>
+	<h1>Cool Graph</h1>
+	<!--1.CREATE svg-->
+	<script type="text/javascript">
+		// var w = 600;
+		// var h = 300;
+		// d3.select("body")
+		// 	.append("svg")
+		// 	.attr("width", w)
+		// 	.attr("height", h);
+	//use web inspector --> look there's an invisible svg elem
+	</script>
+	<script type="text/javascript">
+		var w = 600;
+		var h = 300;
+		//var dataset1 = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+		var dataset1 = [];    //Initialize empty array
+            for (var i = 0; i < 25; i++) {   //Loop 25 times
+                var newNumber = Math.round(Math.random() * 30); 
+                dataset1.push(newNumber); //Add new number to array
+            }
+		var margin = w / dataset1 / 8;
+		var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+		//CREATE ONE RECTANGLE
+		// d3.select("svg")
+		// 		.append("rect")
+		// 		.attr("width", 100)
+		// 		.attr("height",h);
+		//CREATE A RECT FOR EVERY ELEMENT IN DATASET
+		// color_f = d3.scale.linear()
+		// 				  .domain([0,50])
+		// 				  .range(["black","blue"]);
+		svg.selectAll("rect")
+			.data(dataset1)
+			.enter()
+			.append("rect")
+			.attr("width", w / dataset1.length * 7 / 8)
+			.attr("height", function(d){
+				return d * 4;
+			})
+			.attr("x", function(d,i){
+				return i * (w / dataset1.length);
+			})
+			.attr("y", function(d){
+				return h - d * 4;
+			})
+			.attr("fill", function(d){
+				// return color_f(d);
+                return "rgb(0, 0, " + (d*5) + ")";
+            });
+        svg.selectAll("text")
+                .data(dataset1)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d;
+                })
+                .attr("x", function(d,i){
+                    return i*(w/dataset1.length) + ((w / dataset1.length) / 2);
+                })
+                .attr("y", function(d){
+                    return h - (d*4) + 14;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "11px")
+                .attr("fill", "white")
+                .attr("text-anchor","middle");
+	</script>
+
+
+</body>
+</html>

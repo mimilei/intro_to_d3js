@@ -2,15 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>D3 Test</title>
+        <title>More interesting stuff</title>
         <script type="text/javascript" src="d3/d3.v3.js"></script>
-        <script src="fiction.js"></script>
         <script src="data.js"></script>
     </head>
     <body>
-        <h1 align="center">D3.js with real-world data!</h1>
+        <h1 align="center">More fun with d3.js</h1>
+        <p>In this part, we gonna play around with scales, transition and the magical force layout!</p>
             
-        <script type="text/javascript">//why it's in body
+        <script type="text/javascript">
 
             var w = 800,
                 h = 600;
@@ -23,6 +23,19 @@
             var axisW = 4*150,
                 axisH = 4*120;
 
+
+            //Axis
+
+            canvas.append("text")
+                  .attr("x",axisW+20)
+                  .attr("y",20)
+                  .text("Money");
+            
+            canvas.append("text")
+                  .attr("x",0)
+                  .attr("y",axisH+20)
+                  .text("Look");
+
             var xAxisScale = d3.scale.linear()
                                     .domain([0,4])
                                     .range([0,axisW]);
@@ -34,15 +47,7 @@
             var xAxisGroup = canvas.append("g")
                               .call(xAxis);
 
-            canvas.append("text")
-                  .attr("x",axisW+20)
-                  .attr("y",20)
-                  .text("Money");
-            
-            canvas.append("text")
-                  .attr("x",0)
-                  .attr("y",axisH+20)
-                  .text("Look");
+
             
             var yAxisScale = d3.scale.linear()
                                     .domain([0,4])
@@ -56,25 +61,19 @@
 
             var xAxisGroup = canvas.append("g")
                               .call(yAxis);
-                              // .call(yAxis);
 
+
+            var colorScale = d3.scale.linear()
+                                     .domain([1,4])
+                                     .range(["green", "teal"])
+
+            // Transitions
             // circles = canvas.selectAll("circle")
             //       .data(data)  
             //       .enter()
             //       .append("circle");
+
             
-            // circles.attr("cx", function(d){
-            //         return d.Money*150;
-            //       })
-            //        .attr("cy", function(d){
-            //         return d.Looks*120;
-            //       })
-            //       .attr("r", function(d){
-            //         return d.Grades*10;
-            //        })
-            //       .attr("fill", function(d){
-            //         return "rgba("+d.Grades*50+","+0+","+100+",0.1)";
-            //       });
             // circles.attr("cx", 10)     
             //       .attr("cy", 10)
             //       .attr("r", 10)
@@ -82,6 +81,7 @@
             //         return "rgb(0,0,0)";
             //       })
             //       .attr("opacity",0.1);
+
             
             // circles.transition()
             //       .duration(1000)
@@ -99,14 +99,16 @@
             //         return d.Grades*10;
             //       })
             //       .attr("fill", function(d){
-            //         return "rgb("+d.Grades*50+","+0+","+100+")";
+            //         return colorScale(d.Grades);
             //       });
+
+              // The following is the cool force layout.
 
               var nodes = d3.range(data.length)
                             .map(function(i) {return {x:data[i].Money*150, 
                                                       y:data[i].Looks*120, 
                                                       radius: data[i].Grades*10, 
-                                                      color: "rgb("+data[i].Grades*50+","+0+","+100+")" 
+                                                      color: colorScale(data[i].Grades)//"rgb("+data[i].Grades*50+","+0+","+100+")" 
                                                      }});
 
                             var force = d3.layout.force()
@@ -130,8 +132,6 @@
                         .attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
                 });
-                
-
                 
             
         </script>

@@ -1,2 +1,2 @@
-Welcome to the world of d3!
+Welcome, to the world of d3.
 =================

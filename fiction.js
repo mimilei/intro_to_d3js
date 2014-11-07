@@ -1,4 +1,4 @@
-fictions = [
+fiction = [
 {
 list_name: "Hardcover Fiction",
 display_name: "Hardcover Fiction",

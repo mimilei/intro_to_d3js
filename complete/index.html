@@ -1,85 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="utf-8"> <!-- utf 8 is the most popularly used character encoding for the internet-->
-	<title>Intro to Data Visualization</title>
-	<script type="text/javascript" src="d3/d3.v3.js"></script> <!-- This tells program where your d3 file is stored so it can access the library / links to d3 library you downloaded-->
+    <meta charset="utf-8"> <!-- utf 8 is the most popularly used character encoding for the internet-->
+    <title>Intro to Data Visualization</title>
+    <script type="text/javascript" src="d3/d3.v3.js"></script> <!-- This links the program to d3 library you downloaded-->
+    <script src="fiction.js"></script>
 </head>
 <body>
-	<h1>Cool Graph</h1>
-	<!--1.CREATE svg-->
-	<script type="text/javascript">
-		// var w = 600;
-		// var h = 300;
-		// d3.select("body")
-		// 	.append("svg")
-		// 	.attr("width", w)
-		// 	.attr("height", h);
-	//use web inspector --> look there's an invisible svg elem
-	</script>
-	<script type="text/javascript">
-		var w = 600;
-		var h = 300;
-		//var dataset1 = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
-		var dataset1 = [];    //Initialize empty array
-            for (var i = 0; i < 25; i++) {   //Loop 25 times
-                var newNumber = Math.round(Math.random() * 30); 
-                dataset1.push(newNumber); //Add new number to array
-            }
-		var margin = w / dataset1 / 8;
-		var svg = d3.select("body")
-				.append("svg")
-				.attr("width", w)
-				.attr("height", h);
-		//CREATE ONE RECTANGLE
-		
-		//**The following is use scale to map from data to color
-		//We're not going over this:
-		// d3.select("svg")
-		// 		.append("rect")
-		// 		.attr("width", 100)
-		// 		.attr("height",h);
-		//CREATE A RECT FOR EVERY ELEMENT IN DATASET
-		// color_f = d3.scale.linear()
-		// 				  .domain([0,50])
-		// 				  .range(["black","blue"]);
-		svg.selectAll("rect")
-			.data(dataset1)
-			.enter()
-			.append("rect")
-			.attr("width", w / dataset1.length * 7 / 8)
-			.attr("height", function(d){
-				return d * 4;
-			})
-			.attr("x", function(d,i){
-				return i * (w / dataset1.length);
-			})
-			.attr("y", function(d){
-				return h - d * 4;
-			})
-			.attr("fill", function(d){
-				// return color_f(d);
-                return "rgb(0, 0, " + (d*5) + ")";
-            });
-        svg.selectAll("text")
-                .data(dataset1)
+    <h1>Grapes, Wine, and Purple Crayons.</h1>
+    <!--Your code here-->
+    <script type="text/javascript">
+        ////////////////////////////////
+        /* PART 1: BASIC SVG */
+        ///////////////////////////////
+        var w = 800;
+        var h = 300;
+        //Create an empty "canvas" svg element
+        var grape = d3.rgb("#411534");
+        var canvas = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+        //Draw a basic rectangle
+        var rect = canvas.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", w)
+                    .attr("height", h)
+                    .attr("fill", grape);
+                    //note that if fill had be placed
+                    //under canvas, anything created 
+                    //within canvas would be grape-colored
+        //Add some text to this canvas
+        canvas.append("text")
+            .text("Good night, Moon.")
+            .attr("x", w / 2 - 120)
+            .attr("y", h / 2)
+            .attr("font-size", "30px")
+            .attr("fill", "white");
+        </script>
+        
+        <br><!--add a line break-->
+        <br><!--add a line break-->
+
+        <script type="text/javascript">
+        
+        ////////////////////////////////
+        /* PART 2: BASIC BAR GRAPH */
+        ///////////////////////////////
+        var useThisData = [];
+        var manualData = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+        var morphingData = []; //changes every time you refersh
+        for (var i = 0; i < 25; i++) {   //Loop 25 times
+            var newNumber = Math.round(Math.random() * 30); 
+            morphingData.push(newNumber); //Add new number to array
+        }
+        useThisData = morphingData;
+        //create labels
+        var bbgLabels = [];
+        for (var i = 0; i <= useThisData.length; i++){
+            var newLabel = "Bar " + i;
+            bbgLabels.push(newLabel);
+        }
+        //create an empty canvas
+        var bbgCanvas = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h + 50 + 100);
+        //create a subcanvas for the title
+        var bbgTitle = bbgCanvas.append("svg")
+                        .attr("width", w)
+                        .attr("height", 50);
+        bbgTitle.append("text")
+                .text("Basic Bar Graph")
+                .attr("y", 30)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "30px")
+                .attr("fill", "black");
+        //create a subcanvas for the graph
+        var bbgGraph = bbgCanvas.append("svg")
+                        .attr("width", w)
+                        .attr("height", h + 100);
+        //create a basic rectangle--a bar
+        // bbgGraph.append("rect")
+        //     .attr("width",100)
+        //     .attr("height",h)
+        //     .attr("x", 0)
+        //     .attr("y", 0);
+        //Ok, now create a bunch of rectangles by binding manualData to the svg elems
+        bbgGraph.selectAll("rect")
+                .data(useThisData)
+                .enter()
+                .append("rect")
+                .attr("width", w / useThisData.length * 7 / 8) //leave a 1/8 margin
+                .attr("height", function(d){
+                    return d * 4; //d is an element of the manualData array. We scale by 4 for dramatics. ><
+                })
+                .attr("x", function(d,i){
+                    return i*(w / useThisData.length);
+                })
+                .attr("y", function(d){
+                    return h - d * 4; //y is default 0, which is the top of the svg
+                    //To ground the bars, we need to take the svg height and subtract the height of
+                    //each bar so that the bar is drawn starting from its exact stopping position
+                })
+                .attr("fill", function(d){
+                    return "rgba(65,21,48, " + (d*5) / 200 + ")"; //grape color
+                    // return "rgba(0,0,0, " + (d*5) / 200 + ")"; //grayscale
+                });
+        //Now let's add some text so we know what we're looking at
+        bbgGraph.selectAll("text")
+                .data(useThisData)
                 .enter()
                 .append("text")
+                .text(function(d){
+                    return d; //returns value of each data element
+                })
+                .attr("x", function(d,i){
+                    return i*(w / useThisData.length) + w / useThisData.length * 7 / 8 / 2;
+                })
+                .attr("y", function(d){
+                    return h - (d*4) - 5;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "25px")
+                .attr("fill", "black")
+                .attr("text-anchor", "middle");
+        bbgGraph.selectAll("text.label") //assign diff classes to the two kinds of text
+                .data(bbgLabels)
+                .enter()
+                .append("text")
+                .attr("class", "label")
                 .text(function(d){
                     return d;
                 })
                 .attr("x", function(d,i){
-                    return i*(w/dataset1.length) + ((w / dataset1.length) / 2);
+                    return i*(w / useThisData.length);
                 })
-                .attr("y", function(d){
-                    return h - (d*4) + 14;
+                .attr("y", function(d, i){
+                    return h + 20;
                 })
                 .attr("font-family", "sans-serif")
-                .attr("font-size", "11px")
-                .attr("fill", "white")
-                .attr("text-anchor","middle");
-	</script>
-
-
+                .attr("font-size", "20px")
+                .attr("fill", "black")
+                // .attr("dx", "-2.2em")
+                .attr("dy", "-1.5em")
+                .attr("transform", function(d,i){
+                    return "rotate(-90," + (i*(w / useThisData.length) + 45) + "," + (h+20) + ")";
+                });
+        </script>
+        
+        <br><!--add a line break-->
+        <br><!--add a line break-->
+        
+        <script type="text/javascript">
+        ////////////////////////////////
+        /* PART 3: USING REAL DATA */
+        ///////////////////////////////
+        var realData = fiction;
+        var bookh = 250
+        //create labels
+        var realLabels = [];
+        for (var i = 0; i <= realData.length; i++){
+            var newLabel = "Bar " + i;
+            realLabels.push(newLabel);
+        }
+        //create an empty canvas
+        var realCanvas = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", bookh + 50 + 250);
+        //create a subcanvas for the title
+        var realTitle = realCanvas.append("svg")
+                        .attr("width", w)
+                        .attr("height", 50);
+        realTitle.append("text")
+                .text("NY Times Bestsellers 2014: Weeks on List")
+                .attr("y", 30)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "30px")
+                .attr("fill", "black");
+        //create a subcanvas for the graph
+        var realGraph = realCanvas.append("svg")
+                        .attr("width", w)
+                        .attr("height", bookh + 250);
+        //Ok, now create a bunch of rectangles by binding manualData to the svg elems
+        realGraph.selectAll("rect")
+                .data(realData)
+                .enter()
+                .append("rect")
+                .attr("width", w / realData.length * 7 / 8) //leave a 1/8 margin
+                .attr("height", function(d){
+                    return d.weeks_on_list * 5 + 5; //d is the same as fiction[i]
+                })
+                .attr("x", function(d,i){
+                    return i*(w / realData.length);
+                })
+                .attr("y", function(d){
+                    return bookh - (d.weeks_on_list * 5 + 5); //y is default 0, which is the top of the svg
+                    //To ground the bars, we need to take the svg height and subtract the height of
+                    //each bar so that the bar is drawn starting from its exact stopping position
+                })
+                .attr("fill", function(d){
+                    return "rgba(65,21," +  d.weeks_on_list*2 + ", 0.8)"; //grape gradiant
+                    // return "rgba(65,21,48, " + (d.weeks_on_list * 5) / 100 + ")"; //grape color
+                    // return "rgba(0,0,0, " + (d*5) / 200 + ")"; //grayscale
+                });
+        //Add "popularity" level
+        realGraph.selectAll("text.value")
+                .data(realData)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d.weeks_on_list; 
+                })
+                .attr("x", function(d,i){
+                    return i*(w / realData.length) + w / realData.length * 7 / 8 / 2;
+                })
+                .attr("y", function(d){
+                    return bookh - ((d.weeks_on_list*5) - 5) - 13;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "20px")
+                .attr("fill", "black")
+                .attr("text-anchor", "middle");
+        //Add book titles so we know what we're looking at
+        realGraph.selectAll("text.reallabel")
+                .data(realData)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d.book_details[0].title;
+                })
+                .attr("x", function(d,i){
+                    return i*(w / realData.length);
+                })
+                .attr("y", function(d){
+                    // return bookh - (d.weeks_on_list * 5 + 5);
+                    return bookh;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "15px")
+                .attr("fill", "black")
+                .attr("dx", "-0.5em")
+                .attr("dy", "1.5em")
+                .attr("text-anchor","end")
+                .attr("transform", function(d,i){
+                    return "rotate(-90," + i*(w / realData.length) + "," + bookh + ")";
+                });
+    </script>
 </body>
 </html>
